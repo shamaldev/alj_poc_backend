@@ -1,0 +1,67 @@
+openapi: 3.0.0
+info:
+  title: Audio Upload and Streaming API
+  version: 1.0.0
+  description: API to upload audio files to Databricks, fetch file metadata, and stream audio.
+
+servers:
+  - url: http://localhost:3001
+
+paths:
+  /upload:
+    post:
+      summary: Upload an audio file to Databricks
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The audio file to upload
+      responses:
+        '200':
+          description: File uploaded successfully
+        '500':
+          description: Upload failed
+
+  /file-metadata:
+    head:
+      summary: Get metadata of an audio file in Databricks
+      parameters:
+        - in: query
+          name: file_path
+          required: false
+          schema:
+            type: string
+          description: Optional. File path in Databricks (hardcoded in server if not provided)
+      responses:
+        '200':
+          description: Metadata retrieved successfully
+        '412':
+          description: File was modified since given timestamp
+        '401':
+          description: Unauthorized access
+        '500':
+          description: Failed to fetch metadata
+
+      paths:
+  /audio-binary:
+    get:
+      summary: Get binary content of the audio file
+      description: Returns the audio file from Databricks as binary content.
+      responses:
+        '200':
+          description: Binary audio data returned successfully.
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Not found
+        '500':
+          description: Failed to retrieve binary content
