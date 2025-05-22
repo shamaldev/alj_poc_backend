@@ -6,6 +6,9 @@ info:
 
 servers:
   - url: http://localhost:3001
+    description: Local server for development
+  - url: https://alj-poc-backend.onrender.com
+    description: Production server
 
 paths:
   /upload:
