@@ -266,6 +266,30 @@ app.get("/ai-audio-status", async (req, res) => {
 });
 
 
+app.delete("/file", async (req, res) => {
+  try {
+    // const filePath = req.file.path;
+    // const fileStream = fs.createReadStream(filePath);
+    // const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    // const newFileName = `user_input_${timestamp}.mp3`;
+
+    const deleteUrl = `${BASE_URL}/api/2.0/fs/files/Volumes/datalink/lineagedemo/history/history.json`;
+
+    await axios.delete(deleteUrl,  {
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+      },
+    });
+
+    res.status(200).send(`File sucessfully deleted`);
+
+  } catch (err) {
+    console.error(err.response?.data || err.message);
+    res.status(500).send("delete failed.");
+  }
+});
+
+
 // Utility: Get the latest run from workflow
 async function findRecentRun(uploadTimestamp) {
   try {
